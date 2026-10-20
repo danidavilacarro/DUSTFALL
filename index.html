@@ -7,7 +7,7 @@
   <meta name="description" content="DUSTFALL — Construye el último refugio y sobrevive a las tormentas tóxicas." />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
-  <title>DUSTFALL — Survival City · v0.3</title>
+  <title>DUSTFALL — La última luz</title>
 </head>
 <body>
  <div class="shell">
@@ -39,8 +39,8 @@
    <aside class="panel" id="panel"><button id="sheetClose" class="sheet-dismiss" aria-label="Cerrar panel">━ <span>CERRAR</span> ×</button><div id="panelContent"></div></aside>
   </main>
   <nav class="nav" aria-label="Secciones del juego">
-    <button class="navitem active" data-tab="city"><b>⌂</b><span>CIUDAD</span></button>
-    <button class="navitem" data-tab="people"><b>♙</b><span>PERSONAS</span></button>
+    <button class="navitem active" data-tab="city"><b>⌂</b><span>CONSTRUIR</span></button>
+    <button class="navitem" data-tab="people"><b>♙</b><span>SUPERVIVIENTES</span></button>
     <button class="navitem" data-tab="scout"><b>⌖</b><span>EXPLORAR</span></button>
     <button class="navitem" data-tab="tech"><b>⟁</b><span>TECNOLOGÍA</span></button>
   </nav>
@@ -50,6 +50,7 @@
  <script src="game.js" defer></script>
  <script src="survival-v02.js" defer></script>
  <script src="survival-v03.js" defer></script>
+ <script src="city-renderer.js" defer></script>
  <script>if ("serviceWorker" in navigator && location.protocol !== "file:") { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {})); }</script>
 </body>
 </html>

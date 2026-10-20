@@ -93,61 +93,10 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
 // Original painted isometric settlement. Procedural geometry has no licensed game assets.
 const canvas=$('scene');const ctx=canvas.getContext('2d');
 function resize(){const rect=$('world').getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);viewport.w=rect.width;viewport.h=rect.height;canvas.width=Math.floor(rect.width*dpr);canvas.height=Math.floor(rect.height*dpr);canvas.style.width=rect.width+'px';canvas.style.height=rect.height+'px';ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
-const palettes={core:['#af6e40','#624a3b','#f5b66a'],water:['#75b7bd','#376c71','#c0e5e1'],food:['#8fbc74','#506c48','#cde2ad'],energy:['#97a9c3','#3f5465','#e7c27c'],scrap:['#b29372','#655748','#ded2b6'],housing:['#c59a6f','#665242','#f0d0a5'],clinic:['#c6bba6','#6e716c','#e2e0d4'],radar:['#c5a673','#6a6151','#f1dfb9'],wall:['#7b8a84','#4e5551','#bac0ac']};
-function poly(points,fill,stroke='',width=1){ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke()}}
-function tile(x,y,k,shade){poly([[x,y-23*k],[x+48*k,y],[x,y+23*k],[x-48*k,y]],shade,'#66554077',.8)}
-function coords(col,row){const {w,h,k}=viewport;return [w/2+(col-row)*49*k+state.offsetX,h*.54+(col+row-6)*23*k+state.offsetY]}
-function building(id,time){const d=DB[id],level=state.levels[id],k=viewport.k,[x,y]=coords(...d.xy),selected=state.selected===id&&state.tab==='city',p=palettes[id];
- if(selected){ctx.beginPath();ctx.ellipse(x,y+7*k,52*k,27*k,0,0,Math.PI*2);ctx.strokeStyle='#ffe0a0';ctx.lineWidth=2.4*k;ctx.stroke()}
- if(!level){poly([[x,y-14*k],[x+33*k,y],[x,y+14*k],[x-33*k,y]],'#3c3a30bb','#c2a676',1.2);ctx.font=`${22*k}px Arial`;ctx.fillStyle='#fbd596';ctx.textAlign='center';ctx.fillText('+',x,y+8*k);return}
- const wt=(id==='core'?79:id==='wall'?100:64)*(1+.13*(level-1))*k,depth=(id==='core'?30:27)*k,height=(id==='core'?62:id==='radar'?76:id==='wall'?22:39)*(1+.2*(level-1))*k,top=y-height;
- // floor shadow
- ctx.beginPath();ctx.ellipse(x+7*k,y+5*k,wt*.65,depth*.88,0,0,Math.PI*2);ctx.fillStyle='#130f0a65';ctx.fill();
- const apex=[x,top-depth*.6],right=[x+wt/2,top],bottom=[x,top+depth*.6],left=[x-wt/2,top];
- poly([left,bottom,[x,y], [x-wt/2,y-depth*.60]],p[1]);poly([bottom,right,[x+wt/2,y-depth*.60],[x,y]],'#372f28');poly([apex,right,bottom,left],p[0],'#f7d9a344',1);
- if(id==='core'){
-  // tall atmospheric column, illuminated slits, exhaust
-  poly([[x-17*k,top+8*k],[x+17*k,top+8*k],[x+17*k,y-4*k],[x-17*k,y-4*k]],'#4d4c47');
-  poly([[x-7*k,top+15*k],[x+7*k,top+15*k],[x+7*k,y-11*k],[x-7*k,y-11*k]],'#e9a05c');
-  ctx.fillStyle='#ffe4a0';ctx.fillRect(x-2*k,top+17*k,4*k,height*.5);
-  ctx.beginPath();ctx.arc(x,top+10*k,19*k,0,Math.PI*2);ctx.fillStyle='#ffc46c25';ctx.fill();
-  ctx.fillStyle='#c9b09a';ctx.fillRect(x-20*k,top-9*k,40*k,12*k);
- }else if(id==='energy'){
-   poly([[x-27*k,top+15*k],[x,top+2*k],[x+26*k,top+14*k],[x,top+27*k]],'#233d57','#8bd5ee',1);for(let q=-1;q<=1;q++){ctx.strokeStyle='#85b0ca';ctx.lineWidth=k;ctx.beginPath();ctx.moveTo(x+q*13*k,top+7*k);ctx.lineTo(x+q*13*k,top+19*k);ctx.stroke()}
- }else if(id==='food'){
-  for(let j=-1;j<=1;j++){ctx.strokeStyle='#a4d67b';ctx.lineWidth=3*k;ctx.beginPath();ctx.moveTo(x+j*13*k,top+5*k);ctx.lineTo(x+j*13*k,top-13*k);ctx.stroke();ctx.beginPath();ctx.ellipse(x+j*13*k,top-17*k,7*k,4*k,0,0,Math.PI*2);ctx.fillStyle='#9bc87a';ctx.fill()}
- }else if(id==='water'){
-  ctx.beginPath();ctx.ellipse(x,top+2*k,17*k,8*k,0,0,Math.PI*2);ctx.fillStyle='#bddcdb';ctx.fill();ctx.fillStyle='#49818e';ctx.fillRect(x-17*k,top+2*k,34*k,16*k)
- }else if(id==='radar'){
-  ctx.strokeStyle='#dac9a3';ctx.lineWidth=3*k;ctx.beginPath();ctx.moveTo(x,top+16*k);ctx.lineTo(x,top-30*k);ctx.stroke();ctx.beginPath();ctx.arc(x,top-31*k,13*k,Math.PI*.10,Math.PI*.85);ctx.stroke();
- }else if(id==='clinic'){
-  ctx.fillStyle='#f6ddd0';ctx.fillRect(x-7*k,top+13*k,14*k,4*k);ctx.fillRect(x-2*k,top+8*k,4*k,14*k);
- }else if(id==='housing'){
-  for(let i=-1;i<=1;i++){ctx.fillStyle='#eecc80';ctx.fillRect(x+i*12*k-3*k,top+12*k,6*k,8*k)}
- }else if(id==='scrap'){
-  ctx.strokeStyle='#d3c09f';ctx.lineWidth=3*k;ctx.beginPath();ctx.moveTo(x-16*k,top-6*k);ctx.lineTo(x+8*k,top-18*k);ctx.lineTo(x+19*k,top-6*k);ctx.stroke();
- }
- // individual building labels with level, shown at an appropriate scale
- if(k>.42){const label=id==='core'?'NÚCLEO':id==='food'?'COMIDA':id==='water'?'AGUA':id==='energy'?'ENERGÍA':id==='scrap'?'TALLER':id==='housing'?'REFUGIOS':id==='clinic'?'MÉDICO':id==='radar'?'RADAR':'DEFENSAS';ctx.font=`bold ${Math.max(8,10*k)}px Arial`;const tw=ctx.measureText(label+' '+level).width;ctx.fillStyle='#121916cd';ctx.fillRect(x-tw/2-5*k,y+11*k,tw+10*k,16*k);ctx.textAlign='center';ctx.fillStyle='#f5e7c8';ctx.fillText(`${label} ${level}`,x,y+22*k)}
- if(state.construction&&state.construction.id===id){ctx.fillStyle='#ffde97';ctx.font=`bold ${16*k}px Arial`;ctx.textAlign='center';ctx.fillText('⬆',x,top-22*k)}
-}
-function draw(){if(!ctx)return;const w=viewport.w,h=viewport.h;if(!w||!h)return;const isMobile=w<650;viewport.k=Math.min(w/810,h/580)*state.zoom*(isMobile?1.58:1.12);const k=viewport.k;
- ctx.clearRect(0,0,w,h);const background=ctx.createRadialGradient(w*.50,h*.42,20,w*.5,h*.5,Math.max(w,h)*.62);background.addColorStop(0,storming()?'#9d6241':'#675038');background.addColorStop(1,'#222d2b');ctx.fillStyle=background;ctx.fillRect(0,0,w,h);
- // dust, rock and cracked ground
- for(let i=0;i<115;i++){let rx=((i*237+61)%997)/997*w,ry=((i*103+27)%721)/721*h;ctx.fillStyle=i%3?'#a77e5033':'#171c1955';ctx.beginPath();ctx.ellipse(rx,ry,(i%5+2)*k*1.6,(i%3+1)*k*.7,i*.47,0,6.29);ctx.fill()}
- for(let layer=0;layer<9;layer++)for(let col=0;col<9;col++){const [x,y]=coords(col,layer);tile(x,y,k,(col+layer)%2===0?'#735b435d':'#a0805955')}
- // connecting roads from center
- for(const id of IDS){if(id==='core')continue;const [x,y]=coords(...DB[id].xy),[cx,cy]=coords(3,3);ctx.strokeStyle='#88745b7a';ctx.lineWidth=13*k;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x,cy);ctx.lineTo(x,y);ctx.stroke();ctx.strokeStyle='#bd966953';ctx.lineWidth=1.4*k;ctx.stroke()}
- // draw far to near for isometric occlusion
- [...IDS].sort((a,b)=>DB[a].xy[0]+DB[a].xy[1]-DB[b].xy[0]-DB[b].xy[1]).forEach(id=>building(id,performance.now()));
- // people walking around the town
- const usable=Math.min(state.pop-state.sick,22),now=performance.now()/900;for(let i=0;i<usable;i++){const a=i*2.399+now*(.11+(i%5)*.015);const radius=(85+i%5*27)*k;const x=w/2+Math.cos(a)*radius+state.offsetX,y=h*.55+Math.sin(a)*radius*.43+state.offsetY;if(x<0||x>w||y<0||y>h)continue;ctx.fillStyle='#131a17a0';ctx.beginPath();ctx.ellipse(x,y+5*k,3*k,2*k,0,0,6.29);ctx.fill();ctx.fillStyle=i%4?'#d9c2a1':'#8ec3a9';ctx.fillRect(x-2.6*k,y-7*k,5.2*k,9*k);ctx.fillStyle='#c99b72';ctx.beginPath();ctx.arc(x,y-8*k,3.3*k,0,6.29);ctx.fill()}
- // storm clouds wash the city orange, fog increases during danger
- if(storming()){ctx.fillStyle='#a76c3235';ctx.fillRect(0,0,w,h)}if(state.air<50){ctx.fillStyle=`rgba(80,89,60,${(.6-state.air/100)*.3})`;ctx.fillRect(0,0,w,h)}
-}
-function sceneHit(clientX,clientY){const rect=canvas.getBoundingClientRect();const x=clientX-rect.left,y=clientY-rect.top,k=viewport.k;let best=null,dist=Infinity;for(const id of IDS){const [bx,by]=coords(...DB[id].xy);const d=Math.hypot((x-bx), (y-(by-35*k))*1.15);if(d<68*k&&d<dist){dist=d;best=id}}return best}
-let drag=null;canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,dx:0,dy:0};canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.dx+=Math.abs(dx);drag.dy+=Math.abs(dy);if(drag.dx+drag.dy>8){state.offsetX=clamp(state.offsetX+dx,-220,220);state.offsetY=clamp(state.offsetY+dy,-160,160);draw()}});canvas.addEventListener('pointerup',e=>{if(drag&&drag.dx+drag.dy<10){const id=sceneHit(e.clientX,e.clientY);if(id)selectBuilding(id)}drag=null});canvas.addEventListener('pointercancel',()=>drag=null);
-canvas.addEventListener('wheel',e=>{e.preventDefault();state.zoom=clamp(state.zoom+(e.deltaY<0?.08:-.08),.75,1.75);draw();save()},{passive:false});$('zoomIn').onclick=()=>{state.zoom=clamp(state.zoom+.14,.75,1.75);draw();save()};$('zoomOut').onclick=()=>{state.zoom=clamp(state.zoom-.14,.75,1.75);draw();save()};$('centerView').onclick=()=>{state.zoom=1;state.offsetX=0;state.offsetY=0;draw();save()};
+// The visual module installs the renderer after the simulation extensions load.
+function draw(){}
+function coords(col,row){return [col,row]}
+function sceneHit(){return null}
 window.addEventListener('resize',resize);setInterval(()=>{if(state.construction&&Date.now()>=state.construction.ends)finishConstruction();if(state.expedition&&Date.now()>=state.expedition.ends)completeExpedition();render();save()},1000);setInterval(processHour,HOUR_MS);
 $('lastEvent').textContent=state.lastEvent;render();resize();
 if(!state.seenIntro){state.seenIntro=true;save();$('modal').classList.remove('hidden');$('modal').innerHTML='<div class="dialog"><div class="overline">AÑO 2149 · CAPÍTULO 1</div><h2>El último aire limpio</h2><p class="descr">El planeta ha quedado cubierto por polvo tóxico. Catorce supervivientes han encontrado un antiguo Núcleo Atmosférico. Necesitan agua, comida y energía para seguir vivos. Construye, explora y resiste la primera tormenta del día 2.</p><button class="button" data-modalclose="1">COMENZAR SUPERVIVENCIA</button></div>'}

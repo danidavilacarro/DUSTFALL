@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "author": "DUSTFALL contributors",
+  "assets": [
+    {"path": "textures/salvage.svg", "purpose": "Original rivets, scratches and oxidation overlay", "license": "CC0-1.0"},
+    {"path": "../city-renderer.js", "purpose": "Original procedural terrain, 27 building stages, five character roles, vehicles and effects; sprites cached at runtime", "license": "CC0-1.0"}
+  ],
+  "externalRequests": false,
+  "buildingStages": {"unbuilt": 0, "improvised": [1, 2], "reinforced": [3, 4], "consolidated": [5, null]}
+}
