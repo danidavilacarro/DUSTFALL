@@ -1,0 +1,24 @@
+{
+  "name": "DUSTFALL — Survival City",
+  "short_name": "DUSTFALL",
+  "description": "El último refugio de un mundo asolado por tormentas tóxicas.",
+  "lang": "es",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#10191b",
+  "theme_color": "#121b1d",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
