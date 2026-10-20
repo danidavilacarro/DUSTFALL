@@ -7,12 +7,12 @@
   <meta name="description" content="DUSTFALL — Construye el último refugio y sobrevive a las tormentas tóxicas." />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
-  <title>DUSTFALL — Survival City · v0.2</title>
+  <title>DUSTFALL — Survival City · v0.3</title>
 </head>
 <body>
  <div class="shell">
   <header class="topbar">
-    <div class="brand"><span class="brand-icon">◈</span><div><strong>DUSTFALL</strong><small>EL ÚLTIMO REFUGIO</small></div></div>
+    <div class="brand"><span class="brand-icon">◈</span><div><strong>DUSTFALL</strong><small>EL ÚLTIMO REFUGIO · <span id="versionBadge">ALPHA 0.3</span></small></div></div>
     <div class="timedata"><span id="day">DÍA 01</span><strong id="clock">08:00</strong><small id="weather">DESPEJADO</small></div>
     <button class="iconbutton" id="settingsBtn" aria-label="Opciones" title="Opciones">⚙</button>
   </header>
@@ -49,6 +49,7 @@
  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
  <script src="game.js" defer></script>
  <script src="survival-v02.js" defer></script>
+ <script src="survival-v03.js" defer></script>
  <script>if ("serviceWorker" in navigator && location.protocol !== "file:") { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {})); }</script>
 </body>
 </html>
