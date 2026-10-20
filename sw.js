@@ -1,6 +1,6 @@
-/* DUSTFALL v0.2: offline fallback with network-first updates to avoid stale builds. */
-const CACHE='dustfall-survival-v02';
-const CORE=['./','./index.html','./styles.css','./game.js','./survival-v02.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+/* DUSTFALL v0.3: offline fallback with network-first updates to avoid stale builds. */
+const CACHE='dustfall-survival-v03';
+const CORE=['./','./index.html','./styles.css','./game.js','./survival-v02.js','./survival-v03.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',event=>{
