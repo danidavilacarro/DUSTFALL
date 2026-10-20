@@ -1,6 +1,14 @@
-# DUSTFALL — Survival City · prototipo v0.2
+# DUSTFALL — Survival City · prototipo v0.3
 
 Juego original de **supervivencia, construcción y progresión**, inspirado en las dinámicas de gestión de asentamientos de juegos como *Whiteout Survival*, sin utilizar gráficos, código ni elementos de identidad de otros juegos.
+
+## Cambios de v0.3
+
+- **Turnos de trabajo asignables:** seis áreas (agua, comida, energía, recuperación, guardias y medicina), con botones para mover colonos entre instalaciones y efecto directo sobre la producción. El personal enfermo y expedicionario no está disponible.
+- **Asaltos de saqueadores:** empieza el día 4 y se repite cada cuatro días. Decide resistir, fortificar o negociar. Defensa calculada con murallas, guardias y núcleo; heridas y daños persistentes al refugio.
+- **Ciudad día/noche:** iluminación nocturna, faros encendidos y balizas visibles durante una incursión.
+- **Guardado compatible con la v0.2:** los datos de v0.3 se guardan dentro de `dustfall-sim-v1`, sin reiniciar el progreso.
+- **Caché offline renovada:** `sw.js` incluye el nuevo módulo y actualiza su versión de caché.
 
 ## Qué incluye esta versión
 
