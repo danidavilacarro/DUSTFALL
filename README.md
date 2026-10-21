@@ -1,6 +1,16 @@
-# DUSTFALL — Survival City · prototipo v0.3
+# DUSTFALL — Survival City · prototipo v0.4
 
 Juego original de **supervivencia, construcción y progresión**, inspirado en las dinámicas de gestión de asentamientos de juegos como *Whiteout Survival*, sin utilizar gráficos, código ni elementos de identidad de otros juegos.
+
+## Cambios de v0.4 — supervivencia activa
+
+- **Mando de soporte vital:** acceso desde la ciudad a tres decisiones persistentes: racionamiento de comida (limitado/normal/generoso), potencia de filtrado (ahorro/normal/máxima) y recuperación de agua.
+- **Costes y consecuencias de verdad:** ahorro de comida a cambio de menor moral y posibles enfermedades; filtración reforzada a cambio de energía; recuperación hídrica a cambio de electricidad. Todas las políticas afectan a las cifras de la simulación por hora.
+- **Balance y alertas:** el mando muestra el balance neto de agua, comida y energía; la barra de estado indica si la supervivencia es crítica. El Núcleo reacciona visualmente a la calidad del aire.
+- **Partidas conservadas:** añade solamente el campo opcional \`state.v04\`, preservando \`dustfall-sim-v1\` y los campos de v0.2 y v0.3.
+- **Despliegue estático:** se incluye \`survival-v04.js\` en la caché PWA y se renueva su versión.
+
+**Limitaciones:** esto no convierte aún la ciudad en un juego de calidad comercial ni implementa multijugador, cadenas logísticas avanzadas o arte 3D final. Falta validar en móvil físico, partidas largas y el despliegue Cloudflare.
 
 ## Cambios de v0.3
 
