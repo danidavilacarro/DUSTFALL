@@ -31,3 +31,22 @@
 
 /* DUSTFALL v0.3 — interactive staffing and visible security state. */
 .crew-section{margin:12px 0 20px;padding:12px;border:1px solid #52645a;background:linear-gradient(160deg,#293835,#1c2b2c);border-radius:11px}.crew-section>.descr{font-size:12px;line-height:1.55}.crew-summary{display:flex;justify-content:space-between;gap:6px;align-items:center;background:#101e20;padding:9px 10px;border-radius:7px;color:#b9cabb;font-size:10px;margin:12px 0;letter-spacing:.04em}.crew-summary strong{color:#ffe3b7;font-size:13px}.crew-line{display:flex;align-items:center;gap:8px;border-bottom:1px solid #5361595a;padding:11px 0;min-width:0}.crew-line:last-of-type{border:0}.crew-icon{font-size:20px;flex:0 0 25px;text-align:center}.crew-meta{min-width:0;flex:1}.crew-meta strong{display:block;font-size:12px;color:#ecdfca;line-height:1.2}.crew-meta small{display:block;font-size:10px;color:#a8bcb1;margin-top:4px}.crew-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.crew-actions button{background:#374e4a;border:1px solid #66847a;color:#fff3dd;border-radius:6px;width:31px;height:31px;font-size:20px;line-height:1}.crew-actions button:disabled{opacity:.28}.crew-actions output{min-width:22px;text-align:center;font-size:16px;color:#f5c57d;font-weight:800}.crew-locked{opacity:.58}.crew-help{color:#a8bdb2;font-size:10px;margin-top:12px;line-height:1.5}.crew-mini{margin-top:13px;border:1px solid #617063;border-radius:8px;padding:10px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:7px;font-size:10px}.crew-mini strong{font-size:12px;color:#eac891}.crew-mini button{background:transparent;border:0;color:#eac891;font-size:10px;font-weight:800}.colony-threat{position:absolute;z-index:3;left:12px;top:80px;pointer-events:none;background:#16272ce6;border:1px solid #a48d63aa;border-radius:7px;padding:8px 10px;font-weight:800;font-size:10px;color:#ebd1a0;letter-spacing:.05em;box-shadow:0 4px 12px #0007}.colony-threat.raid-alert{border-color:#f8815d;background:#3e1d1df0;color:#fff1dc;animation:dangerpulse 1.5s infinite}.good{color:#9fd9a7!important}@media(max-width:860px){.colony-threat{top:80px;left:11px;font-size:9px;padding:7px}.crew-section{margin:10px 0;padding:10px}.crew-summary{flex-wrap:wrap}.crew-line{gap:6px}}@media(prefers-reduced-motion:reduce){.colony-threat.raid-alert{animation:none}}
+
+/* DUSTFALL 0.4 — persistent survival command center */
+.life-chip{font-size:10px;font-weight:850;letter-spacing:.025em;color:#b5e3bb}
+.life-dialog{width:min(100%,640px);max-height:min(90dvh,850px);overflow-y:auto;overscroll-behavior:contain}
+.life-dialog .life-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0}
+.life-overview span{background:#172528;border:1px solid #3c5854;border-radius:8px;padding:10px 8px;font-size:9px;color:#9fb5ad;line-height:1.5}
+.life-overview strong{display:block;margin-top:4px;font-size:16px;color:#fff0d7}
+.life-rates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:12px 0 19px}
+.life-meter{padding:10px 7px;background:#1b2b2e;border-radius:8px;border:1px solid #344e49;min-width:0}
+.life-meter span,.life-meter small{display:block;font-size:9px;color:#b8c7be}
+.life-meter strong{display:block;font-size:17px;margin:5px 0}
+.life-group{margin:16px 0 8px}.life-group h3{font-size:12px;color:#f4c47e;letter-spacing:.07em;text-transform:uppercase;margin:0 0 9px}
+.life-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.life-group:last-of-type .life-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+.life-option{min-height:84px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:11px 9px;border:1px solid #42605c;border-radius:8px;background:#1d3032;color:#f2e5cf}
+.life-option.chosen{border-color:#ebb878;background:#394439;box-shadow:inset 0 0 0 1px #d5ab6f}
+.life-option strong{font-size:11px;line-height:1.35}.life-option small{display:block;color:#adc4b7;font-size:10px;line-height:1.4;margin-top:5px}
+@media(max-width:860px){.quick-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.quick-controls .survival-action{min-width:0;white-space:normal;font-size:9px;padding:7px 4px;line-height:1.2}.life-dialog{max-height:min(85dvh,760px)}.life-options{gap:5px}.life-option{padding:8px 6px}.life-overview strong{font-size:12px}}
+@media(max-width:390px){.life-dialog .life-overview{gap:4px}.life-dialog .life-rates{gap:4px}.life-option small{font-size:9px}.life-meter strong{font-size:13px}}
