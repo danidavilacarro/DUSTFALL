@@ -39,9 +39,9 @@ Una hora de juego dura cuatro segundos reales en este prototipo acelerado para p
 
 ## Publicación
 
-**GitHub:** crea un repositorio nuevo `DUSTFALL` (inicializado con README). Después se pueden subir a la raíz los archivos de este directorio usando GitHub o herramientas conectadas. **No incluyas las capturas `preview-*.png` ni `play-*.png`** si editas a partir de un directorio de trabajo.
+**GitHub:** repositorio existente [danidavilacarro/DUSTFALL](https://github.com/danidavilacarro/DUSTFALL), rama `main`. El directorio raíz contiene el juego estático. Mantén las partidas existentes y evita sustituir el código por versiones locales antiguas sin revisar las diferencias.
 
-**Cloudflare Pages:** conecta el repo `DUSTFALL`. Framework: `None`. Build command: vacío. Output directory: `/` (raíz). También es posible cargar directamente el contenido de la carpeta con Cloudflare Pages Direct Upload, sin comandos de build.
+**Cloudflare Pages:** utiliza la integración con GitHub del repositorio existente si está conectada. Framework: `None`; build command: vacío; directorio de salida: `/` (raíz). Las modificaciones en `main` pueden generar un despliegue automático si la integración está correctamente configurada. **El despliegue de producción debe verificarse en Cloudflare: no está confirmado solo por el commit en GitHub.**
 
 No necesitas dominio, claves, base de datos ni servicios de pago para ejecutar esta demo.
 
