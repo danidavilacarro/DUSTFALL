@@ -182,9 +182,9 @@
   ctx.clearRect(0,0,w,h);const sky=ctx.createRadialGradient(w/2+state.offsetX,h*.56+state.offsetY,40*k,w/2+state.offsetX,h*.56+state.offsetY,800*k);sky.addColorStop(0,'#a38c65');sky.addColorStop(.5,'#7e7054');sky.addColorStop(1,'#3c4945');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);hits.length=0;
   ctx.save();ctx.translate(w/2+state.offsetX,h*.56+state.offsetY);ctx.scale(k,k);
   terrain();scenery();perimeter(false,t);
-  const entities=IDS.map(id=>({depth:DB[id].xy[0]+DB[id].xy[1],draw:()=>drawBuilding(id,t)}));entities.push(...actors(t));entities.sort((a,b)=>a.depth-b.depth);for(const e of entities)e.draw();perimeter(true,t);
+  const entities=IDS.map(id=>({depth:DB[id].xy[0]+DB[id].xy[1],draw:()=>{drawBuilding(id,t);label(id)}}));entities.push(...actors(t));entities.sort((a,b)=>a.depth-b.depth);for(const e of entities)e.draw();perimeter(true,t);
   if(night()){ctx.fillStyle='#0c283b55';ctx.fillRect(-1200,-900,2400,1800);if(powered())for(const id of IDS){if(!state.levels[id])continue;const [x,y]=project(...DB[id].xy);glow(x,y-25,70,colors[id],.18)}}
-  for(const id of IDS)label(id);
+
   effects=effects.filter(e=>performance.now()-e.at<2200);for(const e of effects){const age=(performance.now()-e.at)/2200,[x,y]=project(...DB[e.id].xy);ellipse(ctx,x,y,40+age*40,20+age*20,`rgba(238,204,133,${(1-age)*.15})`);ctx.strokeStyle=`rgba(255,224,154,${1-age})`;ctx.lineWidth=2;ctx.stroke();for(let j=0;j<12;j++)ellipse(ctx,x+Math.sin(j*2.4)*age*50,y-age*90+j%3*5,1.5,1.5,`rgba(255,223,155,${1-age})`)}
   ctx.restore();
   if(storming()){ctx.fillStyle='#c58a424f';ctx.fillRect(0,0,w,h)}if(state.air<45){ctx.fillStyle='#7e8e4730';ctx.fillRect(0,0,w,h)}
