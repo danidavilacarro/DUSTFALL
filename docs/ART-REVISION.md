@@ -45,3 +45,19 @@ los sprites se atenúan mediante filtro durante un apagón; no son luces 3D inde
 Las paredes y parte del decorado comparten recursos repetidos. La calidad debe juzgarse
 con capturas del juego y en un dispositivo físico; no se afirma equivalencia con un
 juego comercial terminado ni se sustituye una revisión artística por pruebas automáticas.
+
+## Integración con main v0.4
+
+Se incorpora `origin/main` hasta `dbad42b`, preservando `survival-v04.js` íntegro,
+sus políticas de raciones, filtración y reciclaje, su acceso y sus campos persistentes.
+El reloj horario ahora invoca `processHour` a través de una función intermediaria: el
+callback anterior conservaba una referencia a la función previa a los módulos y no
+aplicaba las políticas v0.4 en los ticks automáticos. La prueba de políticas utiliza
+el callback real del temporizador, comprobando agua, comida y energía con las tres
+políticas activas. No se alteran los costes ni el equilibrio del módulo.
+
+La validación actual contiene 13 pruebas: mecánicas, guardado de políticas/trabajos
+pendientes, selección, entrada táctil, cinco tamaños de pantalla, distinción de las
+27 imágenes y diez poses, recursos, eliminación de cachés anteriores y arranque offline.
+Las capturas `art-stage-1.png`, `art-stage-2.png` y `art-stage-3.png` se toman del juego
+en ejecución con niveles 1, 3 y 5 respectivamente; son partidas de prueba avanzadas.

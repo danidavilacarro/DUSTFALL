@@ -1,9 +1,11 @@
-# feat: reconstruir la ciudad isométrica interactiva de DUSTFALL
+# art: nueva colonia con sprites originales y soporte vital v0.4
 
-La colonia pasa a ocupar la pantalla completa con nueve edificios originales que evolucionan en tres etapas (niveles 1–2, 3–4 y 5+), cámara con arrastre y pinza, selección por transparencia y habitantes que recorren caminos según el personal real. Tormentas, apagones, refugio, heridos y asaltos alteran la escena. Se mantienen la economía, los IDs y el guardado `dustfall-sim-v1`.
+La ciudad sustituye los bloques geométricos por 27 sprites originales detallados: nueve edificios con etapas en niveles 1–2, 3–4 y 5+. Añade cinco roles con dos poses de marcha, nueve props de entorno y suelo desértico texturizado. Los edificios, personajes y vehículos se renderizan como entidades independientes; se mantienen selección por transparencia, cámara táctil, mejoras, rutas y emergencias reales de la partida.
 
-Incluye HUD y gestión móvil desplegable, materiales y pictogramas originales, caché de sprites limitada y actualización del service worker con arranque offline. Sigue siendo un sitio estático compatible con Cloudflare Pages, sin build ni claves.
+Se integra `main` hasta `dbad42b`, incluyendo `survival-v04.js` íntegro, sus políticas y sus campos guardados. Se corrige el callback del reloj para que invoque la función horaria ampliada por ese módulo. Se conservan los nueve IDs y `dustfall-sim-v1`.
 
-Validación: 11 pruebas funcionales con Chromium/Playwright, sintaxis de los cinco JS y `git diff --check`. Pantallas de 667×375, 844×390, 1024×768, 1440×900 y 390×844; construcción, evolución, economía, personal, emergencias, expediciones, tecnología, guardados antiguos/actuales, entrada táctil y actualización offline.
+Los atlas originales WebP y metadatos ocupan unos 4 MB, llevan manifiesto con SHA-256 y funcionan sin servicios externos. El caché `dustfall-visual-art-v2` precarga todos los recursos y elimina cachés anteriores del juego. No hay cambios de build para Cloudflare Pages.
 
-Límites: arte procedural estilizado pendiente de revisión comercial contra la imagen de referencia, que no estaba disponible; sin pruebas físicas iOS/Android ni despliegue de Cloudflare verificado. El asalto conserva las decisiones existentes, sin combate táctico nuevo. Detalles en `docs/VISUAL-OVERHAUL-V1.md`.
+Validación: 13 pruebas funcionales con Chromium/Playwright; construcción, evolución, economía, personal, tormenta, asalto, clínica, expediciones, tecnología, guardados antiguos y actuales con trabajos/políticas pendientes, selección, arrastre, pinza, cinco tamaños de pantalla, diferencias entre las 27 imágenes y diez poses, actualización del caché y arranque offline. La prueba de políticas ejecuta el callback real del reloj y verifica agua, comida y energía. Sintaxis JS y `git diff --check` sin errores.
+
+Límites: las figuras usan dos poses y parte de la iluminación está dibujada en los sprites; no hay iluminación 3D física ni combate táctico nuevo. Falta validación física en iOS/Android, revisión artística final y comprobación del despliegue real de Cloudflare. Capturas del juego y detalles de implementación en `docs/ART-REVISION.md`; se generan en `/tmp/dustfall-validation` al ejecutar las pruebas.

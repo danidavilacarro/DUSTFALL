@@ -66,3 +66,13 @@ y [manifiesto de recursos originales](assets/manifest.json).
 Ejecutar localmente: `python -m http.server 8000` desde la raíz. Validación funcional:
 `python tests/visual_overhaul.py` (Python Playwright y Chromium). No hay build ni
 instalación de dependencias para jugar. Los scripts de prueba no forman parte del juego.
+
+### Corrección gráfica con atlas originales
+
+La revisión actual sustituye el arte geométrico por 27 sprites detallados de edificios,
+cinco roles de supervivientes con dos poses, nueve elementos de entorno y un material
+de suelo original. Todo se renderiza como piezas independientes de la ciudad jugable.
+El conjunto de arte optimizado pesa aproximadamente 4 MB y se guarda en caché offline.
+También se integra el soporte vital v0.4 más reciente de `main` y se verifica su reloj
+horario con las políticas activas. Hay 13 pruebas funcionales con Chromium.
+Consulta [la revisión de arte, integración y límites](docs/ART-REVISION.md).

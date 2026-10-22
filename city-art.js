@@ -10,6 +10,6 @@
  art.building=(id,stage)=>art.ready?cut(art.metadata.buildings[id][stage],`${id}:${stage}`):null;
  art.person=(role,frame)=>art.ready?cut(art.metadata.people[role][frame],`${role}:${frame}`):null;
  art.prop=name=>art.ready?cut(art.metadata.props[name],name):null;
- art.loaded=Promise.all([fetch(root+'atlas.json').then(r=>{if(!r.ok)throw Error('No se pudo cargar el atlas');return r.json()}).then(m=>art.metadata=m),...files.map(load)]).then(()=>{art.ground=images['desert-ground.webp','survivors.webp'];art.ready=true;document.dispatchEvent(new Event('dustfall-art-ready'));return true}).catch(e=>{art.error=e.message;console.error(e);return false});
+ art.loaded=Promise.all([fetch(root+'atlas.json').then(r=>{if(!r.ok)throw Error('No se pudo cargar el atlas');return r.json()}).then(m=>art.metadata=m),...files.map(load)]).then(()=>{art.ground=images['desert-ground.webp'];art.ready=true;document.dispatchEvent(new Event('dustfall-art-ready'));return true}).catch(e=>{art.error=e.message;console.error(e);return false});
  window.DustfallArt=art;
 })();

@@ -97,6 +97,6 @@ function resize(){const rect=$('world').getBoundingClientRect(),dpr=Math.min(win
 function draw(){}
 function coords(col,row){return [col,row]}
 function sceneHit(){return null}
-window.addEventListener('resize',resize);setInterval(()=>{if(state.construction&&Date.now()>=state.construction.ends)finishConstruction();if(state.expedition&&Date.now()>=state.expedition.ends)completeExpedition();render();save()},1000);setInterval(processHour,HOUR_MS);
+window.addEventListener('resize',resize);setInterval(()=>{if(state.construction&&Date.now()>=state.construction.ends)finishConstruction();if(state.expedition&&Date.now()>=state.expedition.ends)completeExpedition();render();save()},1000);setInterval(()=>processHour(),HOUR_MS);
 $('lastEvent').textContent=state.lastEvent;render();resize();
 if(!state.seenIntro){state.seenIntro=true;save();$('modal').classList.remove('hidden');$('modal').innerHTML='<div class="dialog"><div class="overline">AÑO 2149 · CAPÍTULO 1</div><h2>El último aire limpio</h2><p class="descr">El planeta ha quedado cubierto por polvo tóxico. Catorce supervivientes han encontrado un antiguo Núcleo Atmosférico. Necesitan agua, comida y energía para seguir vivos. Construye, explora y resiste la primera tormenta del día 2.</p><button class="button" data-modalclose="1">COMENZAR SUPERVIVENCIA</button></div>'}
