@@ -137,7 +137,7 @@
   hits.push({id,x,y,sprite:sprite(id,lv,on)});
   if(lv&&on){const lightY=id==='core'?y-88-s*6:id==='radar'?y-85-s*12:y-27;glow(x,lightY,id==='core'?48:17,colors[id],night()?.28:.12);
    if(id==='radar'&&!art.ready){ctx.save();ctx.translate(x,y-91-s*12);ctx.scale(.45+.25*Math.sin(t*.7),1);ellipse(ctx,0,0,22,10,'#b8c3ae','#edf0c6');line(ctx,[[0,0],[7,-18]],'#dde0bb',2);ctx.restore()}
-   if(id==='core'){for(let i=0;i<6;i++){const a=(t*.6+i*.17)%1;ellipse(ctx,x+Math.sin(i+t)*a*12,y-139-s*6-a*55,4+a*12,3+a*6,`rgba(204,212,187,${(1-a)*.14})`)}line(ctx,[[x-14,y-112-s*6],[x+Math.sin(t*5)*13,y-112-s*6]],'#dac9a1',2)}
+   if(id==='core'){if(state.v04){const airColor=state.air<45?'#f56748':state.air<70?'#ffc465':'#8edbc2';ctx.save();ctx.setLineDash([4,5]);ctx.strokeStyle=airColor+'77';ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(x,y-14,49,22,0,0,TAU);ctx.stroke();ctx.restore();if(state.v04.filtration==='boost')glow(x,y-70,60,'#efbd69',.18)}for(let i=0;i<6;i++){const a=(t*.6+i*.17)%1;ellipse(ctx,x+Math.sin(i+t)*a*12,y-139-s*6-a*55,4+a*12,3+a*6,`rgba(204,212,187,${(1-a)*.14})`)}line(ctx,[[x-14,y-112-s*6],[x+Math.sin(t*5)*13,y-112-s*6]],'#dac9a1',2)}
    if(!sealed()&&crew(id)>0&&id==='scrap'&&Math.sin(t*3)>.55)for(let j=0;j<5;j++)line(ctx,[[x+4,y-18],[x+4+Math.sin(j*2+t)*11,y-18+j*3]],'#ffd997',1);
    if(!sealed()&&crew(id)>0&&id==='energy'){ellipse(ctx,x+20,y-21,2,2,Math.sin(t*6)>.5?'#f8db8b':'#67836b')}
   }
@@ -215,6 +215,7 @@
  // One visual clock is provided by v0.2. ResizeObserver handles drawer/viewport changes.
  new ResizeObserver(resize).observe($('world'));
  window.DustfallVisual=Object.freeze({stage,labels,routePosition,version:'1.0.0'});
+ for(const id of ['shelterBtn','crisisBtn','lifeSupportBtn']){const button=$(id);if(button){const text=button.textContent;button.title=text;button.setAttribute('aria-label',text)}}
  const loading=document.createElement('div');loading.className='art-loading';loading.innerHTML='<span>DUSTFALL</span><small>PREPARANDO LA COLONIA…</small>';$('world').append(loading);
  function reveal(){sprites.clear();render();loading.remove()}
  if(art.ready)reveal();else art.loaded.then(ok=>{if(ok)reveal();else{loading.innerHTML='<span>RECURSOS NO DISPONIBLES</span><small>No se ha podido cargar el arte de la colonia. Recarga cuando recuperes la conexión.</small>'}});

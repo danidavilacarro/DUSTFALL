@@ -1,6 +1,16 @@
-# DUSTFALL — Survival City · prototipo v0.3
+# DUSTFALL — Survival City · prototipo v0.4
 
 Juego original de **supervivencia, construcción y progresión**, inspirado en las dinámicas de gestión de asentamientos de juegos como *Whiteout Survival*, sin utilizar gráficos, código ni elementos de identidad de otros juegos.
+
+## Cambios de v0.4 — supervivencia activa
+
+- **Mando de soporte vital:** acceso desde la ciudad a tres decisiones persistentes: racionamiento de comida (limitado/normal/generoso), potencia de filtrado (ahorro/normal/máxima) y recuperación de agua.
+- **Costes y consecuencias de verdad:** ahorro de comida a cambio de menor moral y posibles enfermedades; filtración reforzada a cambio de energía; recuperación hídrica a cambio de electricidad. Todas las políticas afectan a las cifras de la simulación por hora.
+- **Balance y alertas:** el mando muestra el balance neto de agua, comida y energía; la barra de estado indica si la supervivencia es crítica. El Núcleo reacciona visualmente a la calidad del aire.
+- **Partidas conservadas:** añade solamente el campo opcional \`state.v04\`, preservando \`dustfall-sim-v1\` y los campos de v0.2 y v0.3.
+- **Despliegue estático:** se incluye \`survival-v04.js\` en la caché PWA y se renueva su versión.
+
+**Limitaciones:** esto no convierte aún la ciudad en un juego de calidad comercial ni implementa multijugador, cadenas logísticas avanzadas o arte 3D final. Falta validar en móvil físico, partidas largas y el despliegue Cloudflare.
 
 ## Cambios de v0.3
 
@@ -29,9 +39,9 @@ Una hora de juego dura cuatro segundos reales en este prototipo acelerado para p
 
 ## Publicación
 
-**GitHub:** crea un repositorio nuevo `DUSTFALL` (inicializado con README). Después se pueden subir a la raíz los archivos de este directorio usando GitHub o herramientas conectadas. **No incluyas las capturas `preview-*.png` ni `play-*.png`** si editas a partir de un directorio de trabajo.
+**GitHub:** repositorio existente [danidavilacarro/DUSTFALL](https://github.com/danidavilacarro/DUSTFALL), rama `main`. El directorio raíz contiene el juego estático. Mantén las partidas existentes y evita sustituir el código por versiones locales antiguas sin revisar las diferencias.
 
-**Cloudflare Pages:** conecta el repo `DUSTFALL`. Framework: `None`. Build command: vacío. Output directory: `/` (raíz). También es posible cargar directamente el contenido de la carpeta con Cloudflare Pages Direct Upload, sin comandos de build.
+**Cloudflare Pages:** utiliza la integración con GitHub del repositorio existente si está conectada. Framework: `None`; build command: vacío; directorio de salida: `/` (raíz). Las modificaciones en `main` pueden generar un despliegue automático si la integración está correctamente configurada. **El despliegue de producción debe verificarse en Cloudflare: no está confirmado solo por el commit en GitHub.**
 
 No necesitas dominio, claves, base de datos ni servicios de pago para ejecutar esta demo.
 
