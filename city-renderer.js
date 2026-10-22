@@ -10,6 +10,8 @@
  function icon(id){return `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="${paths[id]}"/></svg>`}
  for(const id of IDS)DB[id].icon=icon(id);
  for(const id of Object.keys(R))R[id].icon=icon(id==='medicine'?'clinic':id);
+ const art=window.DustfallArt;
+ const artWidth={core:166,water:128,food:148,energy:137,scrap:145,housing:139,clinic:141,radar:112,wall:149};
  const stage=level=>level<1?0:level<3?1:level<5?2:3;
  const roleFor=id=>id==='clinic'?'medical':id==='wall'?'guard':id;
  const crew=id=>Math.max(0,state.v03?.crew?.[roleFor(id)]||0);
@@ -39,6 +41,9 @@
  function sprite(id,level,on){const s=stage(level),key=`${id}:${s}:${on}`;if(sprites.has(key)){const cached=sprites.get(key);sprites.delete(key);sprites.set(key,cached);return cached;}
   const el=document.createElement('canvas');el.width=440;el.height=520;const c=el.getContext('2d');c.scale(2,2);c.translate(110,205);
   const accent=on?colors[id]:'#4e5b58',advanced=s===3,reinforced=s>=2;
+  if(s&&art.ready){const image=art.building(id,s),width=artWidth[id]*(s===1?.94:s===2?1:1.07),height=width*image.height/image.width;
+   c.save();if(!on)c.filter='brightness(.40) saturate(.4)';c.drawImage(image,-width/2,10-height,width,height);c.restore();return cache();}
+  if(!s){polygon(c,[[-35,-12],[0,5],[35,-12],[0,-29]],'#75604744');for(const [x,y] of [[-35,-12],[0,5],[35,-12],[0,-29]]){c.fillStyle='#b9a17b';c.fillRect(x-1,y-6,2,8)}line(c,[[-6,-12],[6,-12]],'#e0ba7b',2);line(c,[[0,-18],[0,-6]],'#e0ba7b',2);return cache()}
   // Raised concrete plinth, foundation bolts and drainage strips.
   box(c,0,8,48,23,6,'#8d8066','#514d41','#393f38');
   for(let i=-36;i<=36;i+=12){c.fillStyle='#bca67c';c.fillRect(i,5-Math.abs(i)*.45,3,2)}
@@ -100,18 +105,27 @@
  for(let i=0;i<2300;i++){let x=(i*213.73%1600)-800,y=(i*91.71%1100)-540;gc.fillStyle=i%3?'#e2ca8b17':'#2c393232';gc.fillRect(x,y,1+i%4,1+i%2)}
  for(let i=0;i<50;i++){const x=(i*193%1450)-725,y=(i*97%950)-475;line(gc,[[x,y],[x+12,y-3],[x+29,y+1],[x+47,y-5]],'#c0a77a18',1)}
  for(let i=0;i<23;i++){let x=(i*137%1200)-600,y=(i*179%760)-380;if(Math.abs(x)<360&&Math.abs(y)<220)continue;box(gc,x,y,9+i%9,6,10+i%22,'#877d64','#5f6453','#3b4b43');line(gc,[[x-8,y-10],[x-5,y-34]],'#5a6351',2)}
- function terrain(){ctx.drawImage(ground,-800,-540);polygon(ctx,[project(-.3,-.3),project(6.3,-.3),project(6.3,6.3),project(-.3,6.3)],'#9c8b68','#b3a47d');
-  for(let x=0;x<=6;x++)for(let y=0;y<=6;y++){const p=project(x,y);polygon(ctx,[[p[0],p[1]-25],[p[0]+51,p[1]],[p[0],p[1]+25],[p[0]-51,p[1]]],(x+y)%2?'#b5a17b19':'#645f4d16')}
+ function terrain(){
+  if(art.ready){const pattern=ctx.createPattern(art.ground,'repeat');ctx.save();ctx.scale(.55,.55);ctx.fillStyle=pattern;ctx.fillRect(-2600,-2200,5200,4400);ctx.restore();
+   const shadow=ctx.createRadialGradient(0,-40,100,0,0,750);shadow.addColorStop(0,'#5a412000');shadow.addColorStop(1,'#33281d9c');ctx.fillStyle=shadow;ctx.fillRect(-1400,-1200,2800,2400);
+  }else ctx.drawImage(ground,-800,-540);
+  // Packed dirt within the maintained perimeter, retaining the textured material.
+  polygon(ctx,[project(-.3,-.3),project(6.3,-.3),project(6.3,6.3),project(-.3,6.3)],'#9d795026');
   // Orthogonal road network: actors use these exact same segments.
-  for(const x of [0,2,4,6])worldLine([[x,0],[x,6]],'#666b5d',13);
-  for(const y of [0,2,4,6])worldLine([[0,y],[6,y]],'#666b5d',13);
-  for(const id of IDS){const [x,y]=DB[id].xy;worldLine([[x,y],[x,Math.floor(y/2)*2]],'#777965',11);worldLine([[x,y],[x,Math.floor(y/2)*2]],'#d0bd8a55',1)}
-  for(const x of [0,2,4,6]){worldLine([[x,0],[x,6]],'#b9ac8066',1);worldLine([[x+.12,0],[x+.12,6]],'#384b4544',1)}
+  for(const x of [0,2,4,6])worldLine([[x,0],[x,6]],'#513e2c60',16);
+  for(const y of [0,2,4,6])worldLine([[0,y],[6,y]],'#513e2c60',16);
+  for(const id of IDS){const [x,y]=DB[id].xy;worldLine([[x,y],[x,Math.floor(y/2)*2]],'#6f513c55',14);worldLine([[x,y],[x,Math.floor(y/2)*2]],'#d2aa6940',1)}
+  for(const x of [0,2,4,6]){worldLine([[x,0],[x,6]],'#aa864644',1);worldLine([[x+.12,0],[x+.12,6]],'#493e2e33',1)}
   // Utility main follows the perimeter and connects to the atmospheric plant.
   worldLine([[-.1,0],[-.1,6.1],[6.1,6.1]],'#424f46',5);worldLine([[-.1,0],[-.1,6.1],[6.1,6.1]],'#b5a685',2);
  }
+ function prop(name,x,y,width,opacity=1){if(!art.ready)return;const image=art.prop(name),h=width*image.height/image.width;ctx.save();ctx.globalAlpha=opacity;ctx.drawImage(image,x-width/2,y-h,width,h);ctx.restore()}
+ function scenery(){if(!art.ready)return;for(let i=0;i<18;i++){const a=i*2.399,r=405+(i%5)*45,x=Math.cos(a)*r,y=Math.sin(a)*r*.55;prop(i%3===0?'ruin':'salvage',x,y,35+i%4*12,.86)}
+  for(const p of [[0,2],[2,0],[4,6],[6,4]]){const [x,y]=project(...p);prop('powerpole',x-9,y,31)}
+  const [x,y]=project(2,4);prop('barrier',x+14,y+5,36);
+ }
  function perimeter(front,t){const lvl=state.levels.wall,s=stage(lvl),height=lvl?15+s*4:6;
-  for(const side of front?[2,3]:[0,1]){for(let i=0;i<13;i++){const n=i*.52-.35;if(side===2&&i===6)continue;const p=side===0?[n,-.38]:side===1?[-.38,n]:side===2?[6.38,n]:[n,6.38];const [x,y]=project(...p);box(ctx,x,y,15,7,height,lvl?'#a5a082':'#958970','#747663','#4b594a');if(lvl&&i%3===0){box(ctx,x,y-10,8,4,height+12,'#b2b596','#788472','#4c6358');if(powered()){glow(x,y-height-25,16,raid()?'#ff694a':'#f2d59a',.25);ellipse(ctx,x,y-height-25,2,2,raid()?'#ff7958':'#f4d597')}}}}
+  for(const side of front?[2,3]:[0,1]){for(let i=0;i<13;i++){const n=i*.52-.35;if(side===2&&i===6)continue;const p=side===0?[n,-.38]:side===1?[-.38,n]:side===2?[6.38,n]:[n,6.38];const [x,y]=project(...p);if(art.ready){prop(!lvl?'barrier':(side===0||side===3)?'wallSE':'wallSW',x,y+7,!lvl?32:39+s*3)}else box(ctx,x,y,15,7,height,lvl?'#a5a082':'#958970','#747663','#4b594a');if(lvl&&i%4===0){if(art.ready)prop('watchtower',x,y+5,29+s*3);else box(ctx,x,y-10,8,4,height+12,'#b2b596','#788472','#4c6358');if(powered()){glow(x,y-height-25,16,raid()?'#ff694a':'#f2d59a',.25);ellipse(ctx,x,y-height-25,2,2,raid()?'#ff7958':'#f4d597')}}}}
   if(front){const [x,y]=project(6.38,2.8);line(ctx,[[x-17,y-22],[x+15,y-37]],sealed()?'#e9b76a':'#8b9981',sealed()?9:3);if(raid()&&powered()){polygon(ctx,[[x,y-40],[x+80+Math.sin(t)*30,y+30],[x+120,y-5]],'#ffe2a41a')}}
  }
  function drawBuilding(id,t){const [x,y]=project(...DB[id].xy),lv=state.levels[id],s=stage(lv),on=powered();
@@ -122,7 +136,7 @@
   // Exact alpha hit region uses cached sprite pixels, resolving overlapping roofs.
   hits.push({id,x,y,sprite:sprite(id,lv,on)});
   if(lv&&on){const lightY=id==='core'?y-88-s*6:id==='radar'?y-85-s*12:y-27;glow(x,lightY,id==='core'?48:17,colors[id],night()?.28:.12);
-   if(id==='radar'){ctx.save();ctx.translate(x,y-91-s*12);ctx.scale(.45+.25*Math.sin(t*.7),1);ellipse(ctx,0,0,22,10,'#b8c3ae','#edf0c6');line(ctx,[[0,0],[7,-18]],'#dde0bb',2);ctx.restore()}
+   if(id==='radar'&&!art.ready){ctx.save();ctx.translate(x,y-91-s*12);ctx.scale(.45+.25*Math.sin(t*.7),1);ellipse(ctx,0,0,22,10,'#b8c3ae','#edf0c6');line(ctx,[[0,0],[7,-18]],'#dde0bb',2);ctx.restore()}
    if(id==='core'){for(let i=0;i<6;i++){const a=(t*.6+i*.17)%1;ellipse(ctx,x+Math.sin(i+t)*a*12,y-139-s*6-a*55,4+a*12,3+a*6,`rgba(204,212,187,${(1-a)*.14})`)}line(ctx,[[x-14,y-112-s*6],[x+Math.sin(t*5)*13,y-112-s*6]],'#dac9a1',2)}
    if(!sealed()&&crew(id)>0&&id==='scrap'&&Math.sin(t*3)>.55)for(let j=0;j<5;j++)line(ctx,[[x+4,y-18],[x+4+Math.sin(j*2+t)*11,y-18+j*3]],'#ffd997',1);
    if(!sealed()&&crew(id)>0&&id==='energy'){ellipse(ctx,x+20,y-21,2,2,Math.sin(t*6)>.5?'#f8db8b':'#67836b')}
@@ -131,6 +145,8 @@
   if(state.construction?.id===id){const progress=clamp((Date.now()-state.construction.started)/(state.construction.ends-state.construction.started),0,1);line(ctx,[[x-40,y+8],[x+40,y+8]],'#263c37',5);line(ctx,[[x-40,y+8],[x-40+80*progress,y+8]],'#f6c676',3);for(const side of [-1,1])line(ctx,[[x+side*43,y],[x+side*43,y-80],[x-side*40,y-41]],'#d8ba7c',1)}
  }
  function actor(role,x,y,t,index,action){
+  if(art.ready){const kind=['medical','guard','raider','explorer'].includes(role)?role:'worker',moving=action==='walk'||action==='carry';const frame=moving?Math.floor(t*5+index)%2:0,image=art.person(kind,frame),h=17,w=h*image.width/image.height;ellipse(ctx,x,y+1,3.5,1.5,'#251e1766');ctx.save();ctx.translate(x,y+(moving?Math.sin(t*10+index)*.35:0));ctx.drawImage(image,-w/2,-h,w,h);ctx.restore();return}
+
   const medic=role==='medical',guard=role==='guard',raider=role==='raider',explorer=role==='explorer';
   const color=medic?'#c8dbbe':guard?'#5e7b78':raider?'#ad6246':explorer?'#9d9674':'#d3ac70';
   ellipse(ctx,x+1,y+1,4,2,'#263a3580');const step=action==='walk'?Math.sin(t*7+index)*2:0;
@@ -154,18 +170,18 @@
   if(state.sick>0&&state.levels.clinic){const [x,y]=project(5.4,1.3);entities.push({depth:6.75,draw:()=>{box(ctx,x,y,6,3,3,'#b5c2a0','#86997c','#4a6d5c');ellipse(ctx,x-2,y-7,2.5,2,'#c9ba95');line(ctx,[[x-1,y-6],[x+6,y-9]],'#bdc8a5',3)}})}
   if(state.expedition)for(let j=0;j<3;j++){let p=[6.9+j*.15,2.8+Math.sin(t*.1)*.6];const [x,y]=project(...p);entities.push({depth:p[0]+p[1],draw:()=>actor('explorer',x,y,t,j,'walk')})}
   if(raid())for(let j=0;j<7;j++){const p=[7.1+j*.22,1.1+(j%3)*.5], [x,y]=project(...p);entities.push({depth:p[0]+p[1],draw:()=>actor('raider',x+Math.sin(t+j)*2,y,t,j,'walk')})}
-  if(state.levels.scrap&&crew('scrap')>0&&!sealed()){const p=routePosition('scrap',(t*.025)%2),[x,y]=project(...p);entities.push({depth:p[0]+p[1],draw:()=>{ellipse(ctx,x,y+2,13,5,'#2a3d3555');box(ctx,x,y,12,6,6,'#b09968','#7e7655','#3a5047');box(ctx,x+5,y-5,6,3,6,'#a2b1a0','#60796f','#385b56');for(const side of [-1,1])ellipse(ctx,x+side*9,y,3,4,'#263c37')}})}
+  if(state.levels.scrap&&crew('scrap')>0&&!sealed()){const p=routePosition('scrap',(t*.025)%2),[x,y]=project(...p);entities.push({depth:p[0]+p[1],draw:()=>{ellipse(ctx,x,y+2,13,5,'#2a3d3555');if(art.ready)prop('truck',x,y+3,30);else box(ctx,x,y,12,6,6,'#b09968','#7e7655','#3a5047')}})}
   return entities;
  }
- function label(id){const [x,y]=project(...DB[id].xy),lv=state.levels[id];const selected=state.selected===id&&state.sheetOpen;
-  const text=lv?`${selected?labels[id]+' · ':''}${lv.toString().padStart(2,'0')}`:`+ ${labels[id]}`;ctx.font='600 8px Arial';const w=ctx.measureText(text).width+12;
+ function label(id){const [x,y]=project(...DB[id].xy),lv=state.levels[id];const selected=state.selected===id&&state.sheetOpen;if(!lv&&!selected)return;
+  const text=lv?`${selected?labels[id]+' · ':''}NV. ${lv}`:`+ ${id==='wall'?'DEFENSA':id==='clinic'?'CLÍNICA':'RADAR'}`;ctx.font='600 8px Arial';const w=ctx.measureText(text).width+12;
   ctx.fillStyle=selected?'#d7b47d':'#1d3430dd';ctx.fillRect(x-w/2,y+14,w,15);ctx.fillStyle=selected?'#263b36':lv?'#eee1b9':'#dbc498';ctx.textAlign='center';ctx.fillText(text,x,y+24);
   if(lv&&crew(id)){ellipse(ctx,x+w/2+5,y+21,2,2,sealed()?'#d9b478':'#a8d2a4')}
  }
  draw=function(){if(!viewport.w||!viewport.h)return;const w=viewport.w,h=viewport.h;viewport.k=Math.min(w/870,h/580)*state.zoom;const k=viewport.k,t=performance.now()/1000;
   ctx.clearRect(0,0,w,h);const sky=ctx.createRadialGradient(w/2+state.offsetX,h*.56+state.offsetY,40*k,w/2+state.offsetX,h*.56+state.offsetY,800*k);sky.addColorStop(0,'#a38c65');sky.addColorStop(.5,'#7e7054');sky.addColorStop(1,'#3c4945');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);hits.length=0;
   ctx.save();ctx.translate(w/2+state.offsetX,h*.56+state.offsetY);ctx.scale(k,k);
-  terrain();perimeter(false,t);
+  terrain();scenery();perimeter(false,t);
   const entities=IDS.map(id=>({depth:DB[id].xy[0]+DB[id].xy[1],draw:()=>drawBuilding(id,t)}));entities.push(...actors(t));entities.sort((a,b)=>a.depth-b.depth);for(const e of entities)e.draw();perimeter(true,t);
   if(night()){ctx.fillStyle='#0c283b55';ctx.fillRect(-1200,-900,2400,1800);if(powered())for(const id of IDS){if(!state.levels[id])continue;const [x,y]=project(...DB[id].xy);glow(x,y-25,70,colors[id],.18)}}
   for(const id of IDS)label(id);
@@ -199,5 +215,8 @@
  // One visual clock is provided by v0.2. ResizeObserver handles drawer/viewport changes.
  new ResizeObserver(resize).observe($('world'));
  window.DustfallVisual=Object.freeze({stage,labels,routePosition,version:'1.0.0'});
+ const loading=document.createElement('div');loading.className='art-loading';loading.innerHTML='<span>DUSTFALL</span><small>PREPARANDO LA COLONIA…</small>';$('world').append(loading);
+ function reveal(){sprites.clear();render();loading.remove()}
+ if(art.ready)reveal();else art.loaded.then(ok=>{if(ok)reveal();else{loading.innerHTML='<span>RECURSOS NO DISPONIBLES</span><small>No se ha podido cargar el arte de la colonia. Recarga cuando recuperes la conexión.</small>'}});
  render();resize();
 })();

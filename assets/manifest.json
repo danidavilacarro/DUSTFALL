@@ -1,11 +1,114 @@
 {
-  "version": 1,
+  "version": 2,
   "license": "CC0-1.0",
+  "licenseNote": "Original generated artwork and original atlas metadata. Dedicated to CC0 to the extent applicable rights exist. No exclusivity claim over generated imagery.",
   "author": "DUSTFALL contributors",
   "assets": [
-    {"path": "textures/salvage.svg", "purpose": "Original rivets, scratches and oxidation overlay", "license": "CC0-1.0"},
-    {"path": "../city-renderer.js", "purpose": "Original procedural terrain, 27 building stages, five character roles, vehicles and effects; sprites cached at runtime", "license": "CC0-1.0"}
+    {
+      "path": "art/atlas.json",
+      "bytes": 175687,
+      "sha256": "2c4b31a2566d68537fe5502a23af36e512555bc4c69bf9b5d1921549f0b180dd",
+      "provenance": "Original artwork generated for DUSTFALL; no third-party game assets"
+    },
+    {
+      "path": "art/buildings-stage-1.webp",
+      "bytes": 681078,
+      "sha256": "a411900ea6de1f8cad63d7aefdc9fdb148de050a7bcaf4bd59425e30eb6f6cb0",
+      "provenance": "Original artwork generated for DUSTFALL; no third-party game assets",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "hasAlpha": true
+    },
+    {
+      "path": "art/buildings-stage-2.webp",
+      "bytes": 810790,
+      "sha256": "381c34900644a4ef3ab9795a9c7324c5eeb3167630c39d2cace3af3151dd7cb2",
+      "provenance": "Original artwork generated for DUSTFALL; no third-party game assets",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "hasAlpha": true
+    },
+    {
+      "path": "art/buildings-stage-3.webp",
+      "bytes": 791452,
+      "sha256": "ebe1ce7b4024e0650e13828ce6cdfb1cd967feec71b818f06f251ba7e1f9577e",
+      "provenance": "Original artwork generated for DUSTFALL; no third-party game assets",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "hasAlpha": true
+    },
+    {
+      "path": "art/desert-ground.webp",
+      "bytes": 110168,
+      "sha256": "711f1bae52204e0d7c50fc626613f1836b0659cb21bce0b415b29544a15a3d7d",
+      "provenance": "Original artwork generated for DUSTFALL; no third-party game assets",
+      "dimensions": [
+        512,
+        512
+      ],
+      "hasAlpha": false
+    },
+    {
+      "path": "art/environment.webp",
+      "bytes": 562484,
+      "sha256": "49085576cf63efdaddda39b872827117110a17846464f0b968211fdaf5f270cb",
+      "provenance": "Original artwork generated for DUSTFALL; no third-party game assets",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "hasAlpha": true
+    },
+    {
+      "path": "art/radar-stages.webp",
+      "bytes": 442318,
+      "sha256": "e3f26625bff23d15a478f3848c3ac9584363ad1a30e3cc8686461bfaf685dad9",
+      "provenance": "Original artwork generated for DUSTFALL; no third-party game assets",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "hasAlpha": true
+    },
+    {
+      "path": "art/survivors.webp",
+      "bytes": 407248,
+      "sha256": "631dc52d2ea4bd2fd1b2885ca510505189355edc030a26c21e7ef9ff0276e6da",
+      "provenance": "Original artwork generated for DUSTFALL; no third-party game assets",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "hasAlpha": true
+    }
   ],
   "externalRequests": false,
-  "buildingStages": {"unbuilt": 0, "improvised": [1, 2], "reinforced": [3, 4], "consolidated": [5, null]}
+  "buildingStages": {
+    "unbuilt": 0,
+    "improvised": [
+      1,
+      2
+    ],
+    "reinforced": [
+      3,
+      4
+    ],
+    "consolidated": [
+      5,
+      null
+    ]
+  },
+  "totals": {
+    "buildingSprites": 27,
+    "characterRoles": 5,
+    "characterFrames": 10,
+    "environmentProps": 9,
+    "downloadBytes": 3981225
+  }
 }

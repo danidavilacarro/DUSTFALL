@@ -1,6 +1,6 @@
 /* DUSTFALL Visual V1: offline fallback with network-first updates to avoid stale builds. */
-const CACHE='dustfall-visual-v1';
-const CORE=['./','./index.html','./styles.css','./game.js','./survival-v02.js','./survival-v03.js','./city-renderer.js','./assets/textures/salvage.svg','./assets/manifest.json','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='dustfall-visual-art-v2';
+const CORE=['./','./index.html','./styles.css','./game.js','./survival-v02.js','./survival-v03.js','./city-renderer.js','./city-art.js','./assets/art/atlas.json','./assets/art/buildings-stage-1.webp','./assets/art/buildings-stage-2.webp','./assets/art/buildings-stage-3.webp','./assets/art/radar-stages.webp','./assets/art/environment.webp','./assets/art/desert-ground.webp','./assets/art/survivors.webp','./assets/textures/salvage.svg','./assets/manifest.json','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('dustfall-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',event=>{

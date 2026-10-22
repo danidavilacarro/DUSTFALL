@@ -40,7 +40,7 @@ class GameTests(unittest.TestCase):
         self.page=self.context.new_page();self.errors=[];self.bad=[]
         self.page.on('pageerror',lambda e:self.errors.append(str(e)))
         self.page.on('response',lambda r:self.bad.append(r.url) if r.status>=400 else None)
-        self.page.goto(self.url);self.page.wait_for_function('!!window.DustfallVisual')
+        self.page.goto(self.url);self.page.wait_for_function('!!window.DustfallVisual && !!window.DustfallArt?.ready')
     def tearDown(self):
         self.assertEqual(self.errors,[]);self.assertEqual(self.bad,[]);self.context.close()
     def js(self,s): return self.page.evaluate(s)
@@ -95,7 +95,7 @@ class GameTests(unittest.TestCase):
         legacy=self.js("""()=>{const s=fresh();s.day=7;s.levels.core=4;s.resources.scrap=1234;s.seenIntro=true;return s}""")
         # A new page receives a v0.1 save without the extension fields.
         self.context.add_init_script('localStorage.setItem("dustfall-sim-v1",'+json.dumps(json.dumps(legacy))+')')
-        self.page.reload();self.page.wait_for_function('!!window.DustfallVisual')
+        self.page.reload();self.page.wait_for_function('!!window.DustfallVisual && !!window.DustfallArt?.ready')
         self.assertEqual(self.js('state.day'),7);self.assertEqual(self.js('state.levels.core'),4);self.assertEqual(self.js('state.resources.scrap'),1274)  # Existing chapter reward: +40 for core level 2.
         self.assertTrue(self.js('!!state.v02 && !!state.v03'));self.assertEqual(self.js('KEY'),'dustfall-sim-v1')
         self.js('save()');saved=self.js('JSON.parse(localStorage.getItem(KEY))');self.assertEqual(saved['levels']['core'],4)
@@ -103,9 +103,9 @@ class GameTests(unittest.TestCase):
         context=self.browser.new_context(viewport={'width':1024,'height':768})
         context.add_init_script("window.setInterval=()=>0")
         page=context.new_page();page.on('pageerror',lambda e:self.errors.append(str(e)))
-        page.goto(self.url);page.wait_for_function('!!window.DustfallVisual')
+        page.goto(self.url);page.wait_for_function('!!window.DustfallVisual && !!window.DustfallArt?.ready')
         page.evaluate("""()=>{state.seenIntro=true;state.levels.core=3;state.levels.radar=1;state.resources.scrap=4567;state.v03.crew.water=4;state.v02.claimed=['core','radar'];state.v02.integrity=72;state.v02.shelter=true;state.construction={id:'housing',started:Date.now(),ends:Date.now()+60000};state.expedition={route:'ruins',ends:Date.now()+60000};save()}""")
-        page.reload();page.wait_for_function('!!window.DustfallVisual')
+        page.reload();page.wait_for_function('!!window.DustfallVisual && !!window.DustfallArt?.ready')
         result=page.evaluate("[state.levels.core,state.resources.scrap,state.v03.crew.water,state.v02.integrity,state.v02.shelter,state.construction.id,state.expedition.route]")
         self.assertEqual(result,[3,4567,4,72,True,'housing','ruins']);context.close()
     def test_07_selection_mouse_drag_and_zoom(self):
@@ -133,12 +133,26 @@ class GameTests(unittest.TestCase):
             self.page.locator('#sheetClose').click()
     def test_09_assets_sw_cache_and_offline(self):
         self.page.evaluate('navigator.serviceWorker.ready.then(()=>true)');self.page.reload();self.page.wait_for_function('!!navigator.serviceWorker.controller')
-        self.js("async()=>{await caches.open('dustfall-survival-v03');await caches.open('other-app');const r=await navigator.serviceWorker.getRegistration();await r.unregister();await navigator.serviceWorker.register('/sw.js?upgrade-test')}")
-        self.page.wait_for_function("caches.keys().then(keys=>!keys.includes('dustfall-survival-v03'))")
-        keys=self.js('caches.keys()');self.assertIn('dustfall-visual-v1',keys);self.assertIn('other-app',keys)
-        paths=self.js("caches.open('dustfall-visual-v1').then(c=>c.keys()).then(rs=>rs.map(r=>new URL(r.url).pathname))")
-        for asset in ['/city-renderer.js','/assets/textures/salvage.svg','/assets/manifest.json']: self.assertIn(asset,paths)
-        self.context.set_offline(True);self.page.reload();self.page.wait_for_function('!!window.DustfallVisual');self.assertEqual(self.js('DustfallVisual.version'),'1.0.0')
+        self.js("async()=>{await caches.open('dustfall-survival-v03');await caches.open('dustfall-visual-v1');await caches.open('other-app');const r=await navigator.serviceWorker.getRegistration();await r.unregister();await navigator.serviceWorker.register('/sw.js?upgrade-test')}")
+        self.page.wait_for_function("caches.keys().then(keys=>!keys.includes('dustfall-survival-v03')&&!keys.includes('dustfall-visual-v1'))")
+        keys=self.js('caches.keys()');self.assertIn('dustfall-visual-art-v2',keys);self.assertIn('other-app',keys)
+        paths=self.js("caches.open('dustfall-visual-art-v2').then(c=>c.keys()).then(rs=>rs.map(r=>new URL(r.url).pathname))")
+        for asset in ['/city-renderer.js','/assets/textures/salvage.svg','/assets/manifest.json','/city-art.js','/assets/art/atlas.json','/assets/art/buildings-stage-1.webp','/assets/art/buildings-stage-2.webp','/assets/art/buildings-stage-3.webp','/assets/art/survivors.webp']: self.assertIn(asset,paths)
+        self.context.set_offline(True);self.page.reload();self.page.wait_for_function('!!window.DustfallVisual && !!window.DustfallArt?.ready');self.assertEqual(self.js('DustfallVisual.version'),'1.0.0')
+    def test_09b_original_art_stages_and_alpha_selection(self):
+        self.assertTrue(self.js('DustfallArt.ready'))
+        self.assertEqual(self.js('Object.keys(DustfallArt.metadata.buildings).length'),9)
+        self.assertTrue(self.js("()=>IDS.every(id=>[1,2,3].every(s=>{const c=DustfallArt.building(id,s);return c.width>100&&c.height>100}))"))
+        # Each actual stage produces different rendered pixels, not a renamed shared sprite.
+        for stage in [1,2,3]:
+            self.js(f"()=>{{for(const id of IDS)state.levels[id]={stage*2-1};render()}}")
+            self.page.wait_for_timeout(2300)
+            self.page.screenshot(path=str(ARTIFACTS/f'art-stage-{stage}.png'))
+        self.assertTrue(self.js("()=>IDS.every(id=>{const signatures=[1,2,3].map(s=>DustfallArt.building(id,s).toDataURL());return new Set(signatures).size===3})"))
+        # Transparent gaps must stay transparent: hit tests use the same cached sprite alpha.
+        self.assertIsNone(self.js('sceneHit(20,450)'))
+        self.assertEqual(self.js('Object.keys(DustfallArt.metadata.people).length'),5)
+        self.assertTrue(self.js("()=>['worker','medical','guard','explorer','raider'].every(r=>DustfallArt.person(r,0).toDataURL()!==DustfallArt.person(r,1).toDataURL())"))
     def test_10_power_roles_routes_and_frames(self):
         self.js('()=>{state.resources.energy=0;render()}');self.assertTrue(self.page.locator('body').evaluate("e=>e.classList.contains('power-outage')"))
         # Route positions always lie on a road or the site's entry spur.
