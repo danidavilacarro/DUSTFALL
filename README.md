@@ -54,3 +54,25 @@ No necesitas dominio, claves, base de datos ni servicios de pago para ejecutar e
 - Pendiente: pruebas reales en iOS/Android, equilibrio de economía en partidas prolongadas, ilustraciones de producción, más capítulos, combate real, enemigos del mapa, exploración libre y backend multijugador.
 
 **Importante:** es un prototipo jugable local, no un juego multijugador final ni una copia visual exacta de Whiteout Survival.
+
+## Visual Overhaul V1
+
+La rama `feature/visual-overhaul-v1` incorpora una ciudad Canvas de pantalla completa,
+nueve edificios originales con tres etapas por niveles reales, cámara táctil con pinza,
+habitantes vinculados al personal y emergencias de la simulación. Conserva las partidas
+`dustfall-sim-v1` y el despliegue estático. Véanse [implementación, pruebas y límites](docs/VISUAL-OVERHAUL-V1.md)
+y [manifiesto de recursos originales](assets/manifest.json).
+
+Ejecutar localmente: `python -m http.server 8000` desde la raíz. Validación funcional:
+`python tests/visual_overhaul.py` (Python Playwright y Chromium). No hay build ni
+instalación de dependencias para jugar. Los scripts de prueba no forman parte del juego.
+
+### Corrección gráfica con atlas originales
+
+La revisión actual sustituye el arte geométrico por 27 sprites detallados de edificios,
+cinco roles de supervivientes con dos poses, nueve elementos de entorno y un material
+de suelo original. Todo se renderiza como piezas independientes de la ciudad jugable.
+El conjunto de arte optimizado pesa aproximadamente 4 MB y se guarda en caché offline.
+También se integra el soporte vital v0.4 más reciente de `main` y se verifica su reloj
+horario con las políticas activas. Hay 13 pruebas funcionales con Chromium.
+Consulta [la revisión de arte, integración y límites](docs/ART-REVISION.md).
